@@ -3,7 +3,9 @@ import pandas as pd
 import boto3
 import json
 import traceback
+from dotenv import load_dotenv
 
+load_dotenv()
 # -----------------------------
 # Page Config
 # -----------------------------
@@ -15,10 +17,20 @@ st.set_page_config(
 st.title("📊 AI Data Analyst (NL → Insights)")
 st.caption("Powered by AWS Bedrock")
 
+aws_access_key_id = st.secrets["AWS_ACCESS_KEY_ID"]
+aws_secret_access_key = st.secrets["AWS_SECRET_ACCESS_KEY"]
+region_name = st.secrets["AWS_REGION"]
+
 # -----------------------------
 # AWS Bedrock Client
 # -----------------------------
-bedrock = boto3.client(
+
+aws_management_console = boto3.session.Session(
+    aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key,
+    region_name=region_name  # Replace with your desired region
+)
+bedrock = aws_management_console.client(
     service_name="bedrock-runtime",
     region_name="ap-southeast-1"  # change if needed
 )
